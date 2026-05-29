@@ -1,0 +1,97 @@
+---
+// Events: single featured event, A Love Supreme fundraiser at di Rosa
+const event = {
+  title: "A Love Supreme",
+  subtitle: "Fundraiser for Coltrane Arts + di Rosa",
+  date: "Saturday, June 6",
+  time: "5 – 7 p.m.",
+  venue: "di Rosa SF",
+  address: "1150 25th Street, San Francisco, CA",
+  ticketUrl: "https://dirosa.my.salesforce-sites.com/ticket#/events/a0SVT00000EcmMv2AJ",
+  description:
+    "Contemporary sound and movement performance in honor of John Coltrane's centennial birthday. Selections from 'A Love Supreme' performed by Archbishop Franzo Wayne King, Mother Marina King, Archbishop Wanika King-Stephens, and Manny Berry on the piano.",
+};
+---
+
+<section id="events" class="section bg-canvas">
+  <div class="mx-auto max-w-6xl">
+    <div class="reveal">
+      <p class="eyebrow">Events</p>
+      <span class="rule mt-6"></span>
+    </div>
+
+    <h2 class="reveal mt-10 font-display text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] text-ink">
+      One night, in honor of a centennial.
+    </h2>
+
+    <article class="reveal mt-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      <!-- Date column -->
+      <div class="lg:col-span-3">
+        <div class="border-t border-gold/50 pt-6">
+          <p class="eyebrow text-gold">Save the Date</p>
+          <p class="mt-6 font-display text-5xl text-ink leading-none">Jun</p>
+          <p class="font-display text-7xl text-ink leading-none">06</p>
+          <p class="mt-4 text-ink/70 text-sm tracking-wider">{event.time}</p>
+
+          <!-- Small di Rosa event thumbnail -->
+          <a
+            href={event.ticketUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-8 block w-32 group"
+            aria-label="View event details on di Rosa"
+          >
+            <div class="aspect-square bg-canvas border border-ink/15 overflow-hidden">
+              <img
+                src="/images/diRosaEvent.jpg"
+                alt="A Love Supreme, di Rosa fundraiser"
+                class="archival w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+            <p class="mt-2 text-[0.6rem] tracking-[0.25em] uppercase text-muted group-hover:text-gold transition-colors">
+              View on di Rosa →
+            </p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Body column -->
+      <div class="lg:col-span-9 space-y-8">
+        <header>
+          <h3 class="font-display text-4xl md:text-5xl text-ink italic">
+            {event.title}
+          </h3>
+          <p class="mt-3 text-ink/70 text-lg">{event.subtitle}</p>
+        </header>
+
+        <p class="text-ink/80 text-[1.05rem] leading-relaxed max-w-2xl">
+          {event.description}
+        </p>
+
+        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl pt-6 border-t border-ink/10">
+          <div>
+            <dt class="eyebrow text-muted">Venue</dt>
+            <dd class="mt-2 text-ink">{event.venue}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-muted">Address</dt>
+            <dd class="mt-2 text-ink">{event.address}</dd>
+          </div>
+        </dl>
+
+        <div class="pt-4">
+          <a
+            href={event.ticketUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn"
+          >
+            Reserve Tickets
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

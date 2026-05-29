@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.production
+.DS_Store
+.vscode/
+
+# Large media — exceeds Cloudflare Pages 25 MiB per-file limit.
+# Use the YouTube embed in production; keep local MP4s out of the repo.
+public/video/*.mp4
+public/video/*.mov
+public/video/*.webm

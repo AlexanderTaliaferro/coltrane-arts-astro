@@ -1,0 +1,46 @@
+---
+const donateUrl = "https://give.tithe.ly/?locationId=a08a9e23-a2fb-4b56-a6ad-48ccbcbb2246&giveButtonText=Give%20Online%20Now";
+---
+
+<section id="donate" class="section relative overflow-hidden">
+  <!-- Subtle backdrop -->
+  <div
+    class="absolute inset-0 pointer-events-none opacity-30"
+    style="background: radial-gradient(ellipse at center, rgba(201,169,97,0.15) 0%, transparent 60%);"
+  ></div>
+
+  <div class="relative mx-auto max-w-3xl text-center">
+    <div class="reveal">
+      <p class="eyebrow">Support the Work</p>
+      <span class="rule mt-6 mx-auto"></span>
+    </div>
+
+    <h2 class="reveal mt-10 font-display text-[clamp(2rem,6vw,4rem)] leading-[1.05] text-ink">
+      <em class="italic">"One thought can produce millions of vibrations."</em>
+    </h2>
+
+    <p class="reveal mt-10 text-ink/75 leading-relaxed text-[1.05rem] max-w-xl mx-auto">
+      Your gift supports curriculum-based music education for underserved youth in
+      San Francisco, taught weekly at the Saint John Coltrane Church by
+      university-level instructors and PhD-level scholars.
+    </p>
+
+    <div class="reveal mt-12">
+      <a
+        href={donateUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn"
+        style="border-color: #c9a961; padding: 1.15rem 2.5rem;"
+      >
+        Give Online Now
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <p class="reveal mt-8 text-xs text-muted tracking-wider">
+      Saint John Coltrane Arts is a 501(c)(3) charitable organization. All gifts are
+      tax-deductible to the extent allowed by law.
+    </p>
+  </div>
+</section>

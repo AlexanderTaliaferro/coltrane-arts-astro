@@ -1,0 +1,133 @@
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background: #0a0a0a;
+    color: #f5f1e8;
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    overflow-x: hidden;
+    background: #0a0a0a;
+  }
+
+  ::selection {
+    background: #c9a961;
+    color: #0a0a0a;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+}
+
+@layer components {
+  /* Hairline gold divider */
+  .rule {
+    display: block;
+    width: 80px;
+    height: 1px;
+    background: #c9a961;
+    opacity: 0.7;
+  }
+
+  /* Section padding */
+  .section {
+    padding: clamp(6rem, 12vh, 10rem) clamp(1.5rem, 5vw, 4rem);
+    position: relative;
+  }
+
+  /* Eyebrow micro-label */
+  .eyebrow {
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #c9a961;
+  }
+
+  /* CTA button */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.95rem 1.75rem;
+    border: 1px solid #c9a961;
+    color: #f5f1e8;
+    font-family: "Inter", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 350ms ease, color 350ms ease, transform 350ms ease;
+  }
+
+  .btn:hover {
+    background: #c9a961;
+    color: #0a0a0a;
+    transform: translateY(-1px);
+  }
+
+  .btn .arrow {
+    transition: transform 350ms ease;
+  }
+
+  .btn:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Image archival treatment */
+  .archival {
+    filter: sepia(0.15) contrast(1.05) brightness(0.95);
+    transition: filter 600ms ease;
+  }
+
+  .archival:hover {
+    filter: sepia(0) contrast(1.1) brightness(1);
+  }
+}
+
+/* Smooth scroll via Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }

@@ -1,0 +1,257 @@
+---
+// Gallery: the Coltrane 1972/2024 artwork & its provenance.
+// Scrollytelling: a sticky frame cross-fades through 4 archive images,
+// each synced to a step in the provenance timeline.
+
+const provenance = [
+  {
+    year: "1972",
+    title: "A gift from the Black Panther Party",
+    body: "Emory Douglas, Minister of Culture of the Black Panther Party, creates 'Coltrane' in comradely collaboration with Dr. Huey P. Newton, founder of the Party. The painting is gifted to His Eminence The Most Reverend Franzo W. King, then Yardbird Temple, Revolutionary Church of the Hour, in honor of his dutiful service to the San Francisco and Oakland communities.",
+    image: "/images/black-panther-1972.jpg",
+    caption: "Aubrey Haqq and King Bishop Franzo Haqq XIX with the painting at the first Community Workers Day.",
+  },
+  {
+    year: "1972 – 2024",
+    title: "Held in trust by the Church",
+    body: "For half a century, the painting lives with the congregation that became Saint John Will-I-Am Coltrane African Orthodox Church / Global Spiritual Community, a quiet testament to a Black radical artistic lineage.",
+    image: "/images/coltrane-1972.jpg",
+    caption: "Emory Douglas, 'Coltrane' 1972 / 2024. Charcoal & ink on paper, 30 × 36 inches.",
+  },
+  {
+    year: "2024",
+    title: "Emory signs the work a second time",
+    body: "Douglas returns to the painting fifty-two years later and signs it again, '1972 · 2024', marking its passage and its renewed purpose. Four artist proofs and a limited edition of twenty are produced with Magnolia Editions.",
+    image: "/images/double-signature.jpg",
+    caption: "The double signature: 'Emory 72' and again in 2024.",
+  },
+  {
+    year: "2025",
+    title: "Spike Lee joins the lineage",
+    body: "Spike Lee acquires an artist proof of 'Coltrane' as a contribution to the Saint John Coltrane Arts Foundation, a youth education program in music and sound. His visit to ARTS SPACE on Post Street at Union Square is documented in the photograph below.",
+    image: "/images/spike-lee-2024.jpg",
+    caption: "Reverend Mother Marina King, Archbishop Reverend King, Peter Shaw & Spike Lee at Shaw's studio, July 2024.",
+  },
+];
+---
+
+<section id="gallery" class="bg-canvas">
+  <!-- Section header -->
+  <div class="section pb-0">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal">
+        <p class="eyebrow">Gallery</p>
+        <span class="rule mt-6"></span>
+      </div>
+      <h2 class="reveal mt-10 font-display text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] text-ink max-w-3xl">
+        <em class="italic">Coltrane</em>, 1972 / 2024
+      </h2>
+      <p class="reveal mt-6 text-ink/70 max-w-2xl text-[1.05rem]">
+        Charcoal & ink on paper, 30 × 36 inches. By Emory Douglas. A painting whose
+        provenance is itself a story of San Francisco.
+      </p>
+    </div>
+  </div>
+
+  <!-- Scrollytelling: sticky slideshow + scrolling provenance -->
+  <div class="mx-auto max-w-7xl px-6 md:px-12 mt-24 md:mt-32" data-gallery-root>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
+
+      <!-- Sticky slideshow column -->
+      <div class="lg:col-span-6">
+        <div class="lg:sticky lg:top-28">
+          <figure>
+            <!-- Stacked slides: borderless, seamless against the canvas.
+                 Images use object-contain so nothing crops; cross-fade is long
+                 and ease-out so transitions feel cinematic rather than abrupt. -->
+            <div class="relative aspect-[3/4]">
+              {provenance.map((step, i) => (
+                <div
+                  class={`absolute inset-0 flex items-center justify-center transition-opacity duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${i === 0 ? "opacity-100" : "opacity-0"}`}
+                  style="will-change: opacity;"
+                  data-slide-index={i}
+                >
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    class="archival max-w-full max-h-full w-auto h-auto object-contain"
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              ))}
+
+              <!-- Step indicator: subtle hairlines floating off the image -->
+              <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-3" data-slide-dots>
+                {provenance.map((_, i) => (
+                  <span
+                    class={`block h-px transition-all duration-700 ease-out ${i === 0 ? "w-10 bg-gold" : "w-5 bg-ink/25"}`}
+                    data-dot-index={i}
+                  ></span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Slide caption: also cross-fades -->
+            <figcaption class="relative mt-4 min-h-[3.5rem]">
+              {provenance.map((step, i) => (
+                <span
+                  class={`absolute inset-0 text-xs text-muted tracking-wider leading-relaxed transition-opacity duration-700 ${i === 0 ? "opacity-100" : "opacity-0"}`}
+                  data-caption-index={i}
+                >
+                  {step.caption}
+                </span>
+              ))}
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Scrolling provenance column -->
+      <div class="lg:col-span-6 space-y-32 lg:py-16">
+        {provenance.map((step, i) => (
+          <article
+            class="reveal min-h-[55vh] flex flex-col justify-center"
+            data-step-index={i}
+          >
+            <p class="font-display text-gold/90 text-2xl">{step.year}</p>
+            <h3 class="mt-3 font-display text-3xl md:text-4xl text-ink leading-tight">
+              {step.title}
+            </h3>
+            <p class="mt-5 text-ink/75 leading-relaxed">{step.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- CBS video moment -->
+  <div class="section">
+    <div class="mx-auto max-w-5xl">
+      <div class="reveal text-center">
+        <p class="eyebrow">As Seen On</p>
+        <h3 class="mt-6 font-display text-3xl md:text-4xl text-ink">
+          CBS News: Saint John Coltrane Church
+        </h3>
+        <p class="mt-4 text-ink/70 max-w-xl mx-auto">
+          A look inside the congregation, the music, and the lineage of the painting.
+        </p>
+      </div>
+
+      <div class="reveal mt-12 aspect-video bg-black border border-ink/10 overflow-hidden">
+        <iframe
+          src="https://www.youtube.com/embed/foFyOAvV6vU?rel=0"
+          title="CBS News: Saint John Coltrane Church"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+          class="w-full h-full"
+          data-youtube-embed
+        ></iframe>
+        <video
+          controls
+          preload="none"
+          poster="/images/cbs-poster.jpg"
+          class="w-full h-full hidden"
+          data-mp4-fallback
+        >
+          <source src="/video/CBSJohnColtraneChurch.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ── Sync sticky slideshow with provenance timeline ────────────────────
+  // Scroll-driven activation: on every animation frame during scroll, pick
+  // the single step whose vertical center is closest to the viewport's
+  // vertical center, with a small hysteresis band so the active step
+  // doesn't flicker at the boundary between two panels.
+  const root = document.querySelector<HTMLElement>("[data-gallery-root]");
+  if (root) {
+    const steps = Array.from(root.querySelectorAll<HTMLElement>("[data-step-index]"));
+    const slides = Array.from(root.querySelectorAll<HTMLElement>("[data-slide-index]"));
+    const captions = Array.from(root.querySelectorAll<HTMLElement>("[data-caption-index]"));
+    const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot-index]"));
+
+    // Hysteresis: a new step must beat the current by this many px before
+    // we switch. Prevents oscillation at panel boundaries.
+    const HYSTERESIS = 60;
+
+    let active = 0;
+    let pending = false;
+
+    function setActive(i: number) {
+      if (i === active) return;
+      active = i;
+      slides.forEach((el, idx) => {
+        el.style.opacity = idx === i ? "1" : "0";
+      });
+      captions.forEach((el, idx) => {
+        el.style.opacity = idx === i ? "1" : "0";
+      });
+      dots.forEach((el, idx) => {
+        if (idx === i) {
+          el.classList.remove("bg-ink/25", "w-5");
+          el.classList.add("bg-gold", "w-10");
+        } else {
+          el.classList.remove("bg-gold", "w-10");
+          el.classList.add("bg-ink/25", "w-5");
+        }
+      });
+    }
+
+    function pickActive() {
+      const winCenter = window.innerHeight / 2;
+
+      // Distance from each step's center to viewport center
+      const dists = steps.map((step) => {
+        const r = step.getBoundingClientRect();
+        return Math.abs(r.top + r.height / 2 - winCenter);
+      });
+
+      // Find the global minimum
+      let bestIdx = 0;
+      let bestDist = dists[0];
+      for (let i = 1; i < dists.length; i++) {
+        if (dists[i] < bestDist) {
+          bestDist = dists[i];
+          bestIdx = i;
+        }
+      }
+
+      // Only switch if the candidate beats the current by more than HYSTERESIS,
+      // unless the current step is no longer the closest by a meaningful margin.
+      if (bestIdx !== active) {
+        const activeDist = dists[active];
+        if (activeDist - bestDist > HYSTERESIS) {
+          setActive(bestIdx);
+        }
+      }
+    }
+
+    function onScroll() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        pickActive();
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    // Initial pass after layout settles
+    requestAnimationFrame(pickActive);
+  }
+
+  // ── YouTube embed → MP4 fallback if placeholder ID present ─────────────
+  const yt = document.querySelector<HTMLIFrameElement>("[data-youtube-embed]");
+  const mp4 = document.querySelector<HTMLVideoElement>("[data-mp4-fallback]");
+  if (yt && mp4 && yt.src.includes("foFyOAvV6vU")) {
+    yt.classList.add("hidden");
+    mp4.classList.remove("hidden");
+  }
+</script>
