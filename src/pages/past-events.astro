@@ -1,0 +1,181 @@
+---
+import Base from "../layouts/Base.astro";
+import VideoEmbed from "../components/VideoEmbed.astro";
+import { pastEvents } from "../data/events";
+
+// Group the newest-first events by calendar year for the timeline markers.
+const groups = pastEvents.reduce<Record<string, typeof pastEvents>>(
+  (acc, ev) => {
+    const year = ev.dateISO.slice(0, 4);
+    (acc[year] ??= []).push(ev);
+    return acc;
+  },
+  {}
+);
+const years = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+
+// Whether an event is still upcoming is derived from its date, not a flag, so
+// "Upcoming" tags / ticket buttons disappear on their own once it has passed.
+const todayISO = new Date().toISOString().slice(0, 10);
+---
+
+<Base
+  title="Past Events — St. John Coltrane Arts"
+  description="A record of past performances and gatherings from St. John Coltrane Arts in San Francisco — video and reflections from the music we've made together."
+>
+  <section class="section">
+    <div class="mx-auto max-w-6xl">
+      <!-- Header -->
+      <div class="reveal">
+        <a
+          href="/"
+          class="inline-block text-[0.7rem] tracking-[0.25em] uppercase text-muted hover:text-gold transition-colors"
+        >
+          ← Back to home
+        </a>
+        <p class="eyebrow mt-8">Past Events</p>
+        <span class="rule mt-6"></span>
+      </div>
+
+      <h1
+        class="reveal mt-10 font-display text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] text-ink max-w-3xl"
+      >
+        A record of the music we've made together.
+      </h1>
+      <p class="reveal mt-6 text-ink/70 max-w-2xl text-[1.05rem] leading-relaxed">
+        Performances, fundraisers, and gatherings in honor of Saint John
+        Coltrane — revisited here in video and reflection.
+      </p>
+
+      <!-- Timeline -->
+      <div class="mt-20 space-y-24 md:space-y-32">
+        {
+          years.map((year) => (
+            <div class="space-y-16 md:space-y-24">
+              {/* Year marker */}
+              <div class="reveal flex items-center gap-6">
+                <span class="font-display text-gold/90 text-3xl md:text-4xl leading-none">
+                  {year}
+                </span>
+                <span class="h-px flex-1 bg-gold/20" />
+              </div>
+
+              {groups[year].map((ev) => {
+                const orderIndex = pastEvents.indexOf(ev);
+                const mediaLeft = orderIndex % 2 === 0;
+                const isUpcoming = ev.dateISO > todayISO;
+                return (
+                  <article class="reveal grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                    {/* Media column */}
+                    <div
+                      class:list={[
+                        "lg:col-span-7 space-y-6",
+                        mediaLeft ? "lg:order-1" : "lg:order-2",
+                      ]}
+                    >
+                      {ev.videos.length > 0 ? (
+                        ev.videos.map((v) => (
+                          <VideoEmbed
+                            provider={v.provider}
+                            id={v.id}
+                            title={v.title ?? ev.title}
+                            poster={v.poster}
+                          />
+                        ))
+                      ) : ev.mediaLink ? (
+                        <a
+                          href={ev.mediaLink.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="relative aspect-video bg-black border border-gold/20 overflow-hidden group flex items-center justify-center"
+                        >
+                          <span class="flex flex-col items-center gap-4 text-center px-6">
+                            <span class="relative flex items-center justify-center w-20 h-20">
+                              <span class="absolute inset-0 rounded-full border border-gold/40 transition-all duration-700 ease-out group-hover:scale-125 group-hover:opacity-0"></span>
+                              <span class="relative flex items-center justify-center w-full h-full rounded-full border border-gold/80 bg-black/40 backdrop-blur-sm transition-all duration-500 group-hover:bg-gold group-hover:border-gold">
+                                <svg
+                                  width="22"
+                                  height="24"
+                                  viewBox="0 0 20 22"
+                                  fill="none"
+                                  class="ml-1 text-gold transition-colors duration-500 group-hover:text-canvas"
+                                >
+                                  <path
+                                    d="M19 11L0.999999 21.3923L1 0.607696L19 11Z"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+                              </span>
+                            </span>
+                            <span class="text-[0.7rem] tracking-[0.25em] uppercase text-muted group-hover:text-gold transition-colors">
+                              {ev.mediaLink.label ?? "Watch video"} →
+                            </span>
+                          </span>
+                        </a>
+                      ) : (
+                        <div class="aspect-video bg-black/40 border border-ink/10 flex items-center justify-center">
+                          <span class="text-xs tracking-[0.25em] uppercase text-muted">
+                            Footage coming soon
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Text column */}
+                    <div
+                      class:list={[
+                        "lg:col-span-5 space-y-5",
+                        mediaLeft ? "lg:order-2" : "lg:order-1",
+                      ]}
+                    >
+                      {isUpcoming && <p class="eyebrow text-gold">Upcoming</p>}
+                      <h2 class="font-display text-3xl md:text-4xl text-ink italic leading-tight">
+                        {ev.title}
+                      </h2>
+                      {ev.subtitle && (
+                        <p class="text-ink/60 text-lg">{ev.subtitle}</p>
+                      )}
+                      <p class="text-xs tracking-[0.2em] uppercase text-muted">
+                        {ev.date}
+                        {ev.venue && <span> · {ev.venue}</span>}
+                      </p>
+                      <p class="text-ink/75 leading-relaxed">{ev.description}</p>
+                      {isUpcoming && ev.ticketUrl && (
+                        <div class="pt-2">
+                          <a
+                            href={ev.ticketUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn"
+                          >
+                            Reserve Tickets
+                            <span class="arrow">→</span>
+                          </a>
+                        </div>
+                      )}
+                      {ev.infoUrl && (
+                        <p class="pt-1">
+                          <a
+                            href={ev.infoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2 text-[0.7rem] tracking-[0.25em] uppercase text-muted hover:text-gold transition-colors group"
+                          >
+                            More info
+                            <span class="transition-transform duration-300 group-hover:translate-x-1">
+                              →
+                            </span>
+                          </a>
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

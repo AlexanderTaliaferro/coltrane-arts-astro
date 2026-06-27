@@ -58,10 +58,22 @@ const {
       }
       requestAnimationFrame(raf);
 
-      // Anchor link interception
-      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+      // Anchor link interception — smooth-scroll in-page hash links, including
+      // root-relative ones (e.g. "/#mission") when we're already on that page.
+      // Links pointing at another page (or external URLs that contain "#") fall
+      // through to normal browser navigation.
+      document.querySelectorAll<HTMLAnchorElement>('a[href*="#"]').forEach((a) => {
         a.addEventListener("click", (e) => {
-          const target = document.querySelector(a.getAttribute("href") || "");
+          const href = a.getAttribute("href") || "";
+          const hashIndex = href.indexOf("#");
+          if (hashIndex === -1) return;
+
+          const path = href.slice(0, hashIndex); // "", "/", "/past-events", or a URL
+          const hash = href.slice(hashIndex); // "#mission"
+          const samePage = path === "" || path === window.location.pathname;
+          if (!samePage) return;
+
+          const target = document.querySelector(hash);
           if (target) {
             e.preventDefault();
             lenis.scrollTo(target as HTMLElement, { offset: -40 });

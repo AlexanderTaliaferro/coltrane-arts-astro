@@ -1,16 +1,8 @@
 ---
-// Events: single featured event, A Love Supreme fundraiser at di Rosa
-const event = {
-  title: "A Love Supreme",
-  subtitle: "Fundraiser for Coltrane Arts + di Rosa",
-  date: "Saturday, June 6",
-  time: "5 – 7 p.m.",
-  venue: "di Rosa SF",
-  address: "1150 25th Street, San Francisco, CA",
-  ticketUrl: "https://dirosa.my.salesforce-sites.com/ticket#/events/a0SVT00000EcmMv2AJ",
-  description:
-    "Contemporary sound and movement performance in honor of John Coltrane's centennial birthday. Selections from 'A Love Supreme' performed by Archbishop Franzo Wayne King, Mother Marina King, Archbishop Wanika King-Stephens, and Manny Berry on the piano.",
-};
+// Events: the featured event, sourced from the shared events data.
+// When nothing is featured, the section shows an invitation to check back.
+import { featuredEvent } from "../data/events";
+const event = featuredEvent;
 ---
 
 <section id="events" class="section bg-canvas">
@@ -21,9 +13,17 @@ const event = {
     </div>
 
     <h2 class="reveal mt-10 font-display text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] text-ink">
-      One night, in honor of a centennial.
+      {event ? "One night, in honor of a centennial." : "Come back soon for upcoming events."}
     </h2>
 
+    {!event && (
+      <p class="reveal mt-8 text-ink/70 max-w-xl text-[1.05rem] leading-relaxed">
+        We're planning what's next. In the meantime, revisit the music we've
+        already made together.
+      </p>
+    )}
+
+    {event && (
     <article class="reveal mt-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
       <!-- Date column -->
       <div class="lg:col-span-3">
@@ -93,5 +93,16 @@ const event = {
         </div>
       </div>
     </article>
+    )}
+
+    <div class="reveal mt-20 pt-10 border-t border-ink/10 text-center">
+      <a
+        href="/past-events"
+        class="inline-flex items-center gap-2 text-[0.7rem] tracking-[0.25em] uppercase text-muted hover:text-gold transition-colors group"
+      >
+        View past events
+        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </a>
+    </div>
   </div>
 </section>

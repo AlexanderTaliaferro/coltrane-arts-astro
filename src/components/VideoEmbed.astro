@@ -1,0 +1,170 @@
+---
+// Click-to-play video facade. Renders a poster + gold play button; the heavy
+// YouTube/Vimeo iframe is only injected on click, so a page with many videos
+// stays fast. A custom `poster` is preferred; otherwise we fall through
+// YouTube's thumbnail sizes, and finally an elegant branded panel if none load.
+interface Props {
+  provider: "youtube" | "vimeo";
+  id: string;
+  title?: string;
+  poster?: string;
+  class?: string;
+}
+
+const { provider, id, title = "Play video", poster, class: className = "" } =
+  Astro.props;
+
+const embedSrc =
+  provider === "youtube"
+    ? `https://www.youtube.com/embed/${id}?rel=0&autoplay=1`
+    : `https://player.vimeo.com/video/${id}?autoplay=1`;
+
+// Poster candidates, tried in order. A custom poster wins; otherwise step
+// through YouTube's thumbnail sizes (maxres isn't always generated).
+const thumbChain = poster
+  ? [poster]
+  : provider === "youtube"
+    ? [
+        `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
+        `https://i.ytimg.com/vi/${id}/sddefault.jpg`,
+        `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+        `https://i.ytimg.com/vi/${id}/mqdefault.jpg`,
+      ]
+    : [];
+
+const initialPoster = thumbChain[0];
+const restChain = thumbChain.slice(1);
+const posterless = !initialPoster;
+---
+
+<div
+  class:list={[
+    "relative aspect-video bg-black border border-gold/20 overflow-hidden group",
+    posterless && "is-posterless",
+    className,
+  ]}
+  data-video-facade
+  data-embed-src={embedSrc}
+  data-title={title}
+>
+  <button
+    type="button"
+    class="absolute inset-0 w-full h-full cursor-pointer"
+    aria-label={`Play: ${title}`}
+    data-video-trigger
+  >
+    {initialPoster && (
+      <img
+        src={initialPoster}
+        alt={title}
+        class="archival absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+        loading="lazy"
+        data-thumb-chain={JSON.stringify(restChain)}
+      />
+    )}
+
+    <!-- Branded panel shown only when no thumbnail is available -->
+    <span
+      class="posterless-fallback absolute inset-0 z-[5] flex items-end p-5 md:p-6 pointer-events-none transition-opacity duration-500"
+    >
+      <span class="font-display italic text-ink/45 text-lg md:text-xl leading-snug pr-20">
+        {title}
+      </span>
+    </span>
+
+    <!-- Soft black veil for an elegant, cinematic frame -->
+    <span
+      class="absolute inset-0 bg-black/35 group-hover:bg-black/15 transition-colors duration-500"
+    ></span>
+
+    <!-- Gold play button -->
+    <span class="absolute inset-0 z-10 flex items-center justify-center">
+      <span class="relative flex items-center justify-center w-20 h-20">
+        <!-- Expanding hairline ring on hover -->
+        <span
+          class="absolute inset-0 rounded-full border border-gold/40 transition-all duration-700 ease-out group-hover:scale-125 group-hover:opacity-0"
+        ></span>
+        <!-- Solid disc -->
+        <span
+          class="relative flex items-center justify-center w-full h-full rounded-full border border-gold/80 bg-black/40 backdrop-blur-sm transition-all duration-500 group-hover:bg-gold group-hover:border-gold"
+        >
+          <svg
+            width="22"
+            height="24"
+            viewBox="0 0 20 22"
+            fill="none"
+            class="ml-1 text-gold transition-colors duration-500 group-hover:text-canvas"
+          >
+            <path d="M19 11L0.999999 21.3923L1 0.607696L19 11Z" fill="currentColor" />
+          </svg>
+        </span>
+      </span>
+    </span>
+  </button>
+</div>
+
+<style>
+  /* Reveal the branded panel only when no real thumbnail is present. */
+  .posterless-fallback {
+    opacity: 0;
+  }
+  .is-posterless .posterless-fallback {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // Swap the poster for the embed iframe on first click (delegated, runs once).
+  document.addEventListener("click", (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>(
+      "[data-video-trigger]"
+    );
+    if (!trigger) return;
+    const facade = trigger.closest<HTMLElement>("[data-video-facade]");
+    if (!facade) return;
+    const src = facade.dataset.embedSrc;
+    if (!src) return;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.title = facade.dataset.title || "Video";
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute(
+      "allow",
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    );
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.className = "absolute inset-0 w-full h-full";
+    facade.replaceChildren(iframe);
+  });
+
+  // Walk the poster fallback chain; reveal the branded panel if none load.
+  document
+    .querySelectorAll<HTMLImageElement>("[data-thumb-chain]")
+    .forEach((img) => {
+      const advance = () => {
+        let chain: string[] = [];
+        try {
+          chain = JSON.parse(img.dataset.thumbChain || "[]");
+        } catch {}
+        const next = chain.shift();
+        img.dataset.thumbChain = JSON.stringify(chain);
+        if (next) {
+          img.src = next;
+        } else {
+          img.style.display = "none";
+          img
+            .closest<HTMLElement>("[data-video-facade]")
+            ?.classList.add("is-posterless");
+        }
+      };
+
+      img.addEventListener("error", advance);
+      // YouTube sometimes serves a tiny grey placeholder with HTTP 200 — skip it.
+      img.addEventListener("load", () => {
+        if (img.naturalWidth > 0 && img.naturalWidth <= 120) advance();
+      });
+      // Handle an image that already failed before this script attached.
+      if (img.complete && img.naturalWidth === 0) advance();
+    });
+</script>
