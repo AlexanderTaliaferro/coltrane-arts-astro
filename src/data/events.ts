@@ -73,7 +73,7 @@ export const events: SiteEvent[] = [
         id: "CjNrckRhmlY",
         title:
           "Emory Douglas in conversation with Archbishop Franzo W. King, D.D.",
-        poster: "/images/coltrane-1972.jpg",
+        poster: "/images/cityLights.jpg",
       },
     ],
   },

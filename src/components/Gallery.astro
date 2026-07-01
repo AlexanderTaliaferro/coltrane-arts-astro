@@ -5,18 +5,18 @@
 
 const provenance = [
   {
-    year: "1972",
-    title: "A gift from the Black Panther Party",
-    body: "Emory Douglas, Minister of Culture of the Black Panther Party, creates 'Coltrane' in comradely collaboration with Dr. Huey P. Newton, founder of the Party. The painting is gifted to His Eminence The Most Reverend Franzo W. King, then Yardbird Temple, Revolutionary Church of the Hour, in honor of his dutiful service to the San Francisco and Oakland communities.",
-    image: "/images/black-panther-1972.jpg",
-    caption: "Aubrey Haqq and King Bishop Franzo Haqq XIX with the painting at the first Community Workers Day.",
+    year: "1972 · 2024",
+    title: "‘Coltrane’",
+    body: "Charcoal on museum board (30″ × 36″) by Emory Douglas / a painting with provenance as a San Francisco story of St John Coltrane Arts",
+    image: "/images/coltrane-portrait.jpg",
+    caption: "‘Coltrane’ 1972/2024 imagePrint (30″ × 36″) · Emory Douglas · limited-edition (20) 4-a/p · pigment on Hahnemühle photo-rag paper",
   },
   {
-    year: "1972 – 2024",
-    title: "Held in trust by the Church",
-    body: "For half a century, the painting lives with the congregation that became Saint John Will-I-Am Coltrane African Orthodox Church / Global Spiritual Community, a quiet testament to a Black radical artistic lineage.",
-    image: "/images/coltrane-1972.jpg",
-    caption: "Emory Douglas, 'Coltrane' 1972 / 2024. Charcoal & ink on paper, 30 × 36 inches.",
+    year: "1972",
+    title: "A gift from the Black Panther Party",
+    body: "Emory Douglas, Minister of Culture of the Black Panther Party, creates ‘Coltrane’ in comradely collaboration with Dr. Huey P. Newton, founder of the Party. The painting is gifted to His Eminence The Most Reverend Franzo W. King, then Yardbird Temple, Revolutionary Church of the Hour, in honor of his dutiful service to the San Francisco and Oakland communities.",
+    image: "/images/black-panther-1972.jpg",
+    caption: "Aubrey Haqq and King Bishop Franzo Haqq XIX with the painting at the first Community Workers Day.",
   },
   {
     year: "2024",
@@ -57,8 +57,8 @@ const provenance = [
   <div class="mx-auto max-w-7xl px-6 md:px-12 mt-24 md:mt-32" data-gallery-root>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
 
-      <!-- Sticky slideshow column -->
-      <div class="lg:col-span-6">
+      <!-- Sticky slideshow column (desktop only — mobile uses per-step inline images) -->
+      <div class="hidden lg:block lg:col-span-6">
         <div class="lg:sticky lg:top-28">
           <figure>
             <!-- Stacked slides: borderless, seamless against the canvas.
@@ -107,12 +107,22 @@ const provenance = [
       </div>
 
       <!-- Scrolling provenance column -->
-      <div class="lg:col-span-6 space-y-32 lg:py-16">
+      <div class="lg:col-span-6 space-y-16 lg:space-y-32 lg:py-16">
         {provenance.map((step, i) => (
           <article
-            class="reveal min-h-[55vh] flex flex-col justify-center"
+            class="reveal lg:min-h-[55vh] flex flex-col justify-center"
             data-step-index={i}
           >
+            <!-- Mobile-only inline image -->
+            <div class="lg:hidden mb-6 aspect-[3/4] overflow-hidden">
+              <img
+                src={step.image}
+                alt={step.title}
+                class="archival w-full h-full object-contain"
+                loading={i === 0 ? "eager" : "lazy"}
+              />
+              <p class="mt-3 text-xs text-muted tracking-wider leading-relaxed">{step.caption}</p>
+            </div>
             <p class="font-display text-gold/90 text-2xl">{step.year}</p>
             <h3 class="mt-3 font-display text-3xl md:text-4xl text-ink leading-tight">
               {step.title}

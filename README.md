@@ -60,48 +60,51 @@ public/
   robots.txt     # Search engine directives
 ```
 
-## Deploying to Cloudflare Pages (Git-based)
+## Deploying to Cloudflare Pages (direct upload with Wrangler)
+
+This site deploys to the existing Cloudflare Pages project **`coltrane-arts`**
+via Wrangler **direct upload**. The project is **not** connected to Git, so
+pushing to GitHub does *not* deploy anything — you build locally and upload the
+`dist/` folder yourself.
 
 ### One-time setup
 
-1. **Create a GitHub repo** at <https://github.com/new>. Name it
-   `coltrane-arts` (or whatever you'd like). Leave it empty, no README.
+```bash
+npm install -g wrangler   # if you don't already have it
+wrangler login            # authorize your Cloudflare account
+```
 
-2. **Push this folder** (run from the project root):
+### Deploy to production
 
-   ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/coltrane-arts.git
-   git branch -M main
-   git push -u origin main
-   ```
+```bash
+npm run build
+wrangler pages deploy dist --project-name=coltrane-arts --branch=production
+```
 
-3. **Connect to Cloudflare Pages.** Go to
-   <https://dash.cloudflare.com/> → **Workers & Pages** → **Create application**
-   → **Pages** → **Connect to Git**, authorize GitHub, pick the repo.
+> **The `--branch=production` flag is required.** The project's *production
+> branch* is `production`. A deploy on any other branch (e.g. `main`) is
+> published as a **Preview** at a `https://<hash>.coltrane-arts.pages.dev` URL
+> and does **not** update the live domains.
 
-4. **Build settings** (paste exactly):
+Production serves:
 
-   | Field                  | Value                |
-   | ---------------------- | -------------------- |
-   | Framework preset       | Astro                |
-   | Build command          | `npm run build`      |
-   | Build output directory | `dist`               |
-   | Root directory         | *(leave empty)*      |
+- <https://coltrane-arts.pages.dev>
+- <https://stjohncoltranearts.org>
+- <https://stjohncoletranearts.org> (alternate spelling)
 
-5. **Environment variables** → add one:
+### Deploy a preview (optional)
 
-   - `NODE_VERSION` = `22`
+To share a draft without touching production, deploy under any other branch name:
 
-6. Hit **Save and Deploy.** First build takes ~2 minutes. Your site goes live at
-   `https://coltrane-arts.pages.dev` (the subdomain may vary).
+```bash
+npm run build
+wrangler pages deploy dist --project-name=coltrane-arts --branch=preview
+```
 
-### Ongoing deploys
+Wrangler prints a unique `https://<hash>.coltrane-arts.pages.dev` URL for it.
 
-Every `git push` to `main` triggers a new production build automatically.
-Pull requests get their own preview URLs.
+### Custom domains
 
-### Adding a custom domain later
-
-In the Cloudflare Pages project → **Custom domains** → **Set up a custom domain**.
-Follow the DNS instructions. After it's live, update `site:` in
-`astro.config.mjs` to the new URL and push.
+Already configured in the dashboard (**Workers & Pages → coltrane-arts →
+Custom domains**). If you add a new domain, update `site:` in
+`astro.config.mjs` to match and redeploy.
