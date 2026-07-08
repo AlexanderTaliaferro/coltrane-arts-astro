@@ -34,6 +34,23 @@ export interface SiteEvent {
 
 export const events: SiteEvent[] = [
   {
+    slug: "ascension-day-2026",
+    title: "Ascension Day Celebration",
+    subtitle: "59th Ascension Day of Saint John Coltrane",
+    date: "Wednesday, July 15, 2026",
+    dateISO: "2026-07-15",
+    time: "7 – 9 p.m. (doors 6:30 p.m.)",
+    venue: "Grace Cathedral",
+    address: "1100 California Street, San Francisco, CA 94108",
+    ticketUrl:
+      "https://www.eventbrite.com/e/ascension-day-celebration-tickets-1992867009873?aff=oddtdtcreator",
+    description:
+      "Something extraordinary is happening at Grace Cathedral. Join us as we celebrate the 59th Ascension Day of Saint John Coltrane with soul-stirring music, sacred jazz, powerful worship, and a spirit you have to experience to believe. Come catch the vibration. All are welcome!",
+    featured: true,
+    videos: [],
+  },
+
+  {
     slug: "a-love-supreme-di-rosa-2026",
     title: "A Love Supreme",
     subtitle: "Fundraiser for Coltrane Arts + di Rosa",

@@ -3,6 +3,11 @@
 // When nothing is featured, the section shows an invitation to check back.
 import { featuredEvent } from "../data/events";
 const event = featuredEvent;
+
+// Derive the "Save the Date" month/day display from the event's ISO date.
+const eventDate = event ? new Date(`${event.dateISO}T00:00:00`) : null;
+const eventMonth = eventDate?.toLocaleDateString("en-US", { month: "short" });
+const eventDay = eventDate?.toLocaleDateString("en-US", { day: "2-digit" });
 ---
 
 <section id="events" class="section bg-canvas">
@@ -13,7 +18,7 @@ const event = featuredEvent;
     </div>
 
     <h2 class="reveal mt-10 font-display text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] text-ink">
-      {event ? "One night, in honor of a centennial." : "Come back soon for upcoming events."}
+      {event ? "Come catch the vibration." : "Come back soon for upcoming events."}
     </h2>
 
     {!event && (
@@ -29,28 +34,28 @@ const event = featuredEvent;
       <div class="lg:col-span-3">
         <div class="border-t border-gold/50 pt-6">
           <p class="eyebrow text-gold">Save the Date</p>
-          <p class="mt-6 font-display text-5xl text-ink leading-none">Jun</p>
-          <p class="font-display text-7xl text-ink leading-none">06</p>
+          <p class="mt-6 font-display text-5xl text-ink leading-none">{eventMonth}</p>
+          <p class="font-display text-7xl text-ink leading-none">{eventDay}</p>
           <p class="mt-4 text-ink/70 text-sm tracking-wider">{event.time}</p>
 
-          <!-- Small di Rosa event thumbnail -->
+          <!-- Small event poster thumbnail -->
           <a
             href={event.ticketUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="mt-8 block w-32 group"
-            aria-label="View event details on di Rosa"
+            aria-label={`View event details for ${event.title}`}
           >
             <div class="aspect-square bg-canvas border border-ink/15 overflow-hidden">
               <img
-                src="/images/diRosaEvent.jpg"
-                alt="A Love Supreme, di Rosa fundraiser"
+                src="/images/AscensionDay.jpg"
+                alt={event.title}
                 class="archival w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
               />
             </div>
             <p class="mt-2 text-[0.6rem] tracking-[0.25em] uppercase text-muted group-hover:text-gold transition-colors">
-              View on di Rosa →
+              View on Eventbrite →
             </p>
           </a>
         </div>

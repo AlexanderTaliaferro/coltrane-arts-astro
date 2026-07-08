@@ -2,6 +2,11 @@
 
 Newest entries at the top. See [CLAUDE.md](CLAUDE.md) for the entry template and logging policy.
 
+## 2026-06-30 (4)
+**Files:** src/components/Board.astro
+**Change:** Added mx-auto to the board grid so the two-member layout centers within the section instead of left-aligning.
+**Verify:** Run `npm run dev`, scroll to Board section — the two cards should be centered on the page.
+
 ## 2026-06-30 (3)
 **Files:** src/components/Gallery.astro
 **Change:** Fixed gallery scroll on narrow screens. Sticky slideshow column is now desktop-only (hidden on mobile). Each provenance step now shows its image inline above the text on mobile, with the caption below it. min-h-[55vh] and space-y-32 gaps are also desktop-only.
