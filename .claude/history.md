@@ -2,6 +2,11 @@
 
 Newest entries at the top. See [CLAUDE.md](CLAUDE.md) for the entry template and logging policy.
 
+## 2026-07-12 12:49
+**Files:** package.json, package-lock.json
+**Change:** Pinned `@astrojs/sitemap` to exactly `3.6.0` to fix a build crash (`Cannot read properties of undefined (reading 'reduce')`). Versions 3.7.0+ and the 3.6.1 patch use the Astro 5-only `astro:routes:resolved` hook, which never fires on this project's Astro 4, leaving `_routes` undefined. 3.6.0 is the last version compatible with Astro 4.
+**Verify:** Run `npm run build` — it should complete with `[@astrojs/sitemap] sitemap-index.xml created at dist` and no reduce error.
+
 ## 2026-06-30 (4)
 **Files:** src/components/Board.astro
 **Change:** Added mx-auto to the board grid so the two-member layout centers within the section instead of left-aligning.
